@@ -31,6 +31,15 @@ public class PlayerController : MonoBehaviour {
 	void FixedUpdate () {
 		state = GamePad.GetState (controllerNum);
 		transform.position += new Vector3 (playerSpeed * state.ThumbSticks.Left.X, playerSpeed * state.ThumbSticks.Left.Y, 0);
+		float x = state.ThumbSticks.Left.X;
+		float y = state.ThumbSticks.Left.Y;
+		float radius = Mathf.Sqrt (Mathf.Pow (x, 2) + Mathf.Pow (y, 2));
+		if(!(x == 0 && y ==0))
+			transform.rotation = Quaternion.Euler(new Vector3(
+				0,0,y >0 ?
+				Vector3.Angle(new Vector3(radius,0,0), new Vector3(x,y,0)):
+				Vector3.Angle(new Vector3(radius,0,0), new Vector3(x,y,0))*-1)
+			);
 		script.abilityUpdate (state,prestate);
 		prestate = state;
 	}
