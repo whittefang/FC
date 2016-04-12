@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using XInputDotNetPure;
-public enum playerClass {Rogue = 0,Mage = 1,Priest = 2,Warrior = 3};
-public class PlayerController : MonoBehaviour {
+
+public class PlayerController : MonoBehaviour{
+	public enum playerClass {Rogue = 0,Mage = 1,Priest = 2,Warrior = 3};
 	public PlayerIndex controllerNum;
 	public playerClass Class;
 	private Ability script;
-	public float playerSpeed = 1;
+
 	private GamePadState state;
 	private GamePadState prestate;
 	// Use this for initialization
@@ -16,21 +17,24 @@ public class PlayerController : MonoBehaviour {
 		switch(Class)
 		{
 		case playerClass.Rogue:
-			script = new Rogue ();
+			script = new Rogue (100,.1f);
 			break;
 		case playerClass.Mage:
+			script = new Mage (100,.1f);
 			break;
 		case playerClass.Priest:
+			script = new Priest (100,.1f);
 			break;
 		case playerClass.Warrior:
+			script = new Warrior (100,.1f);
 			break;
 		}
 	}
 
-	// Update is called once per frame
+	// this is just movement updates and abylity update
 	void FixedUpdate () {
 		state = GamePad.GetState (controllerNum);
-		transform.position += new Vector3 (playerSpeed * state.ThumbSticks.Left.X, playerSpeed * state.ThumbSticks.Left.Y, 0);
+		transform.position += new Vector3 (script.speedGet() * state.ThumbSticks.Left.X, script.speedGet() * state.ThumbSticks.Left.Y, 0);
 		float x = state.ThumbSticks.Left.X;
 		float y = state.ThumbSticks.Left.Y;
 		float radius = Mathf.Sqrt (Mathf.Pow (x, 2) + Mathf.Pow (y, 2));
@@ -40,7 +44,16 @@ public class PlayerController : MonoBehaviour {
 				Vector3.Angle(new Vector3(radius,0,0), new Vector3(x,y,0)):
 				Vector3.Angle(new Vector3(radius,0,0), new Vector3(x,y,0))*-1)
 			);
-		script.abilityUpdate (state,prestate);
+		script.abilityUpdate (state,prestate,gameObject);
 		prestate = state;
+	}
+
+
+
+	/**
+	 * when doing anything to effect another player call this function
+	 */
+	public Ability effect(){
+		return script;
 	}
 }
