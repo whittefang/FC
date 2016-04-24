@@ -3,7 +3,8 @@ using System.Collections;
 
 public class AIMovementScript : MonoBehaviour {
 	public Transform currentTarget;
-	public float distanceBuffer = 1, translateSpeed = .05f;
+	public float distanceBuffer = 1, translateSpeed = .01f;
+	bool isMoving = false;
 	// Use this for initialization
 	void Start () {
 	
@@ -11,11 +12,19 @@ public class AIMovementScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (currentTarget != null) {
-			MoveTowardsTarget ();
+		if ( !isMoving && (currentTarget != null) && ((Mathf.Abs (currentTarget.position.x - transform.position.x) > 1f + distanceBuffer) || (Mathf.Abs (currentTarget.position.y - transform.position.y) > 1f+ distanceBuffer))) {
+			StopAllCoroutines ();
+			StartCoroutine(MoveWrapper());
 		}
 	}
-
+	IEnumerator MoveWrapper(){
+		isMoving = true;
+		while ((Mathf.Abs (currentTarget.position.x - transform.position.x) > .1f + distanceBuffer) || (Mathf.Abs (currentTarget.position.y - transform.position.y) > .1f+ distanceBuffer)) {
+			MoveTowardsTarget ();
+			yield return null;
+		}
+		isMoving = false;
+	}
 	void MoveTowardsTarget(){
 		Vector3 newPosition = transform.position;
 
@@ -34,5 +43,8 @@ public class AIMovementScript : MonoBehaviour {
 		}
 
 		transform.position = newPosition;
+	}
+	public void SetTarget(Transform newTarget){
+		currentTarget = newTarget;
 	}
 }

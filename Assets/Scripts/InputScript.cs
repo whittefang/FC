@@ -4,13 +4,14 @@ using XInputDotNetPure; // Required in C#
 
 public class InputScript : MonoBehaviour {
 	public delegate void buttonDelegate();
+	public delegate void ThumbstickDelegate(float x, float y);
 	buttonDelegate aButtonPress, bButtonPress, xButtonPress, yButtonPress, aButtonRelease, bButtonRelease, xButtonRelease, yButtonRelease;
-
+	ThumbstickDelegate leftStick;
 
 	PlayerIndex playerIndex;
 	GamePadState state;
 	GamePadState prevState;
-	int playerNumber = 0;
+	public int playerNumber = 0;
 	// Use this for initialization
 	void Start () {
 
@@ -23,7 +24,7 @@ public class InputScript : MonoBehaviour {
 		state = GamePad.GetState (playerIndex, GamePadDeadZone.None);
 
 		// send input for movement(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
-
+		leftStick(state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
 		// Detect if a button was pressed this frame
 		if (prevState.Buttons.A == ButtonState.Released && state.Buttons.A == ButtonState.Pressed) {
 			aButtonPress ();
