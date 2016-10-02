@@ -15,7 +15,7 @@ public class OnyxiaAttackScript : MonoBehaviour {
 	void Start () {
 		MF.mesh = fireMesh = new Mesh ();
 		AS = GetComponent<AggroScript> ();
-		ExecuteAttack ();
+		//ExecuteAttack ();
 	}
 	
 	// Update is called once per frame
@@ -51,6 +51,7 @@ public class OnyxiaAttackScript : MonoBehaviour {
 		fireBreathCooldown = 60;
 		StartCoroutine( StartFireBreathCoolDown());
 		yield return new WaitForSeconds (1);
+		fireBreathHitbox.SetActive (false);
 		// calcualte firebreath hit area
 		ExecuteAttack();
 
@@ -90,6 +91,7 @@ public class OnyxiaAttackScript : MonoBehaviour {
 		fireMesh.vertices = newPoints;
 		newPoints [20] = Vector3.zero;
 		fireMesh.name = "fire";
+		fireBreathHitbox.SetActive (true);
 		int i = 0;
 		for (int x = 0; x < 19; x++) {
 			Debug.Log (x);

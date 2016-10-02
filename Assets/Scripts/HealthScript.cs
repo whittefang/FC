@@ -21,7 +21,9 @@ public class HealthScript : MonoBehaviour {
 	}
 	public void CheckHealth(){
 		if (healthAmount <= 0) {
-			DeathFunc ();
+			if (DeathFunc != null) {
+				DeathFunc ();
+			}
 			gameObject.SetActive (false);
 		}
 	}

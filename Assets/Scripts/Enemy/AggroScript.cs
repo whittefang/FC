@@ -77,4 +77,13 @@ public class AggroScript : MonoBehaviour {
 		aggroListPlayer[2] =  GameObject.Find ("Mage").transform;
 		aggroListPlayer[3] =  GameObject.Find ("Rogue").transform;
 	}
+	public Transform GetTarget(){
+		if (currentTarget >= 0) {
+			return aggroListPlayer [currentTarget].transform;
+		} else {
+			Debug.Log ("aggro GetTarget failure return player 0");
+			return aggroListPlayer [0].transform;
+		}
+
+	}
 }
